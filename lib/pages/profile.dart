@@ -11,6 +11,9 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: header(context, titleText: 'Profile'),
+      body: Center(
+        child: Text("Profile"),
+      ),
     );
   }
 }

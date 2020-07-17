@@ -78,16 +78,14 @@ class _HomeState extends State<Home> {
     });
   }
 
+  //animate to change page
   _changeIndex(int pageIndex) {
-    _pageController.jumpToPage(pageIndex);
+    _pageController.animateToPage(pageIndex,
+        duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 
   //widget to display for authenticated users
   Scaffold buildAuthScreen() {
-    // return RaisedButton(
-    //   onPressed: logout,
-    //   child: Text('Logout'),
-    // );
     return Scaffold(
       body: PageView(
         controller: _pageController,
