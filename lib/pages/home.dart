@@ -1,13 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:social_share/models/user.dart';
 import 'package:social_share/pages/activity_feed.dart';
+import 'package:social_share/pages/create_account.dart';
 import 'package:social_share/pages/profile.dart';
 import 'package:social_share/pages/search.dart';
-import 'package:social_share/pages/timeline.dart';
 import 'package:social_share/pages/upload.dart';
 
 final GoogleSignIn _googleSignIn = GoogleSignIn();
+final CollectionReference _userRef = Firestore.instance.collection('users');
+final DateTime timestamp = DateTime.now();
+User currentUser = User();
 
 class Home extends StatefulWidget {
   @override
@@ -37,13 +42,14 @@ class _HomeState extends State<Home> {
     _googleSignIn.signInSilently(suppressErrors: false).then((account) {
       handleSignIn(account);
     }).catchError((error) {
-      print('Error signing in : $error');
+      print('Error signing in Silently : $error');
     });
   }
 
   //handle google sign in
   handleSignIn(GoogleSignInAccount account) {
     if (account != null) {
+      createUserInFirestore();
       setState(() {
         print('User signed in account : $account');
         isAuth = true;
@@ -53,6 +59,36 @@ class _HomeState extends State<Home> {
         isAuth = false;
       });
     }
+  }
+
+  createUserInFirestore() async {
+    //check if user exits in users collection in db according to their id
+    final GoogleSignInAccount user = _googleSignIn.currentUser;
+    final doc = await _userRef.document(user.id).get();
+
+    //if user doesnot exit take to create account page
+    if (!doc.exists) {
+      final username = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateAccount(),
+        ),
+      );
+
+      //after getting userInfo make a new user document in users collection
+      _userRef.document(user.id).setData({
+        "id": user.id,
+        "username": username,
+        "bio": "",
+        "photoUrl": user.photoUrl == null ? {} : user.photoUrl,
+        "email": user.email,
+        "displayName": user.displayName,
+        "timestamp": timestamp,
+      });
+    }
+
+    //if doc exits we make its data accessible to all pages
+    currentUser = User.fromDocument(doc);
   }
 
   @override
@@ -92,7 +128,11 @@ class _HomeState extends State<Home> {
         onPageChanged: _onPageChanged,
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
-          Timeline(),
+          // Timeline(),
+          RaisedButton(
+            onPressed: logout,
+            child: Text("Log Out"),
+          ),
           ActivityFeed(),
           Upload(),
           Search(),
