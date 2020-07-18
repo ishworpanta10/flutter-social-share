@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:social_share/widgets/header.dart';
 
@@ -8,18 +10,32 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffolfKey = GlobalKey<ScaffoldState>();
   String username;
   String desc;
 
   submit() {
-    _formKey.currentState.save();
-    Navigator.pop(context, username);
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      SnackBar snackBar = SnackBar(
+          content: Text(
+        "Welcome $username",
+        textAlign: TextAlign.center,
+      ));
+      _scaffolfKey.currentState.showSnackBar(snackBar);
+      Timer(Duration(milliseconds: 2000), () {
+        Navigator.pop(context, username);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext parentContext) {
     return Scaffold(
-      appBar: header(context, titleText: 'Setup your account'),
+      key: _scaffolfKey,
+      appBar: header(context,
+          titleText: 'Setup your account', removeBackbutton: true),
       body: ListView(
         children: <Widget>[
           Container(
@@ -47,9 +63,14 @@ class _CreateAccountState extends State<CreateAccount> {
                               username = name;
                             },
                             validator: (username) {
-                              return username.length < 3
-                                  ? "Username cannot be less than 3 character"
-                                  : null;
+                              if (username.trim().length < 3 ||
+                                  username.isEmpty) {
+                                return "Username too shorts";
+                              } else if (username.length > 20) {
+                                return "Username too long";
+                              } else {
+                                return null;
+                              }
                             },
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
