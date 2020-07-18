@@ -65,8 +65,8 @@ class _TimelineState extends State<Timeline> {
   Widget build(context) {
     return Scaffold(
       appBar: header(context, isAppTitle: true),
-      body: FutureBuilder<QuerySnapshot>(
-          future: _userRef.getDocuments(),
+      body: StreamBuilder<QuerySnapshot>(
+          stream: _userRef.snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return circularProgress();
