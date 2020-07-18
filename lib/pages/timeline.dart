@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_share/widgets/header.dart';
+import 'package:social_share/widgets/progress.dart';
 
 final _userRef = Firestore.instance.collection('users');
 
@@ -13,7 +14,7 @@ class _TimelineState extends State<Timeline> {
   @override
   void initState() {
     super.initState();
-    getUsers();
+    // getUsers();
     // getUserById();
   }
 
@@ -46,22 +47,37 @@ class _TimelineState extends State<Timeline> {
   // }
 
   //using filter with where args
-  getUsers() async {
-    final snapshots =
-        await _userRef.where("isAdmin", isEqualTo: true).getDocuments();
-    final snapshot = snapshots.documents;
-    snapshot.forEach((doc) {
-      print(doc.data);
-    });
-  }
+  // getUsers() async {
+  //   final snapshots = await _userRef
+  //       // Filters
+  //       .limit(2)
+  //       .orderBy('postsCount', descending: true)
+  //       .where("isAdmin", isEqualTo: true)
+  //       .where("username", isEqualTo: "Ishwor")
+  //       .getDocuments();
+  //   final snapshot = snapshots.documents;
+  //   snapshot.forEach((doc) {
+  //     print(doc.data);
+  //   });
+  // }
 
   @override
   Widget build(context) {
     return Scaffold(
       appBar: header(context, isAppTitle: true),
-      body: Center(
-        child: Text("Timeline"),
-      ),
+      body: FutureBuilder<QuerySnapshot>(
+          future: _userRef.getDocuments(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return circularProgress();
+            }
+            final List<Text> children = snapshot.data.documents
+                .map((doc) => Text(doc['username']))
+                .toList();
+            return ListView(
+              children: children,
+            );
+          }),
     );
   }
 }
