@@ -16,6 +16,9 @@ class _TimelineState extends State<Timeline> {
     super.initState();
     // getUsers();
     // getUserById();
+    // insertUser();
+    // updateUser();
+    deleteUser();
   }
 
   // get single user by its id
@@ -60,6 +63,47 @@ class _TimelineState extends State<Timeline> {
   //     print(doc.data);
   //   });
   // }
+
+  //Inseting documents to firebase
+
+  // insertUser() {
+  //   _userRef.add({
+  //     'username': 'Messi',
+  //     'isAdmin': false,
+  //     'postsCount': 6,
+  //   });
+  // }
+
+  //Inserting witn own id
+  // insertUser() {
+  //   _userRef.document('abcd').setData({
+  //     'username': 'Messi',
+  //     'isAdmin': false,
+  //     'postsCount': 6,
+  //   });
+  // }
+
+  //Updating documents firebase
+  updateUser() async {
+    final doc = await _userRef.document('abcd').get();
+    if (doc.exists) {
+      doc.reference.updateData({
+        'username': 'Sanny',
+        'isAdmin': false,
+        'postsCount': 6,
+      });
+    }
+  }
+
+  //Deleting documents from firebase
+
+  deleteUser() async {
+    final doc = await _userRef.document('abcd').get();
+
+    if (doc.exists) {
+      doc.reference.delete();
+    }
+  }
 
   @override
   Widget build(context) {
