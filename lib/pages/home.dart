@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
   createUserInFirestore() async {
     //check if user exits in users collection in db according to their id
     final GoogleSignInAccount user = _googleSignIn.currentUser;
-    final doc = await _userRef.document(user.id).get();
+    DocumentSnapshot doc = await _userRef.document(user.id).get();
 
     //if user doesnot exit take to create account page
     if (!doc.exists) {
@@ -85,10 +85,15 @@ class _HomeState extends State<Home> {
         "displayName": user.displayName,
         "timestamp": timestamp,
       });
+
+      //after adding new data we need to deserialize so
+      doc = await _userRef.document(user.id).get();
     }
 
     //if doc exits we make its data accessible to all pages
     currentUser = User.fromDocument(doc);
+    print(currentUser);
+    print(currentUser.username);
   }
 
   @override
