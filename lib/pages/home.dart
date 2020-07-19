@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,7 +12,11 @@ import 'package:social_share/pages/upload.dart';
 
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 final CollectionReference userRef = Firestore.instance.collection('users');
+final CollectionReference postsRef = Firestore.instance.collection('posts');
+
+final StorageReference storageRef = FirebaseStorage.instance.ref();
 final DateTime timestamp = DateTime.now();
+
 User currentUser = User();
 
 class Home extends StatefulWidget {
@@ -92,7 +97,7 @@ class _HomeState extends State<Home> {
 
     //if doc exits we make its data accessible to all pages
     currentUser = User.fromDocument(doc);
-    print(currentUser);
+    // print(currentUser);
     print(currentUser.username);
   }
 
@@ -139,9 +144,11 @@ class _HomeState extends State<Home> {
             child: Text("Log Out"),
           ),
           ActivityFeed(),
-          Upload(),
+          Upload(
+            currentUser: currentUser,
+          ),
           Search(),
-          Profile(),
+          Profile(currentUser: currentUser),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
