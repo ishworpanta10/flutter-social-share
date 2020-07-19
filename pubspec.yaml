@@ -23,7 +23,7 @@ dependencies:
   firebase_messaging: ^6.0.16
   timeago: ^2.0.26
   cached_network_image: ^2.2.0+1
-  flutter_svg: ^0.16.0
+  flutter_svg: ^0.17.4
 
   cupertino_icons: ^0.1.3
 

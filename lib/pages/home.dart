@@ -10,7 +10,7 @@ import 'package:social_share/pages/search.dart';
 import 'package:social_share/pages/upload.dart';
 
 final GoogleSignIn _googleSignIn = GoogleSignIn();
-final CollectionReference _userRef = Firestore.instance.collection('users');
+final CollectionReference userRef = Firestore.instance.collection('users');
 final DateTime timestamp = DateTime.now();
 User currentUser = User();
 
@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
   createUserInFirestore() async {
     //check if user exits in users collection in db according to their id
     final GoogleSignInAccount user = _googleSignIn.currentUser;
-    DocumentSnapshot doc = await _userRef.document(user.id).get();
+    DocumentSnapshot doc = await userRef.document(user.id).get();
 
     //if user doesnot exit take to create account page
     if (!doc.exists) {
@@ -76,7 +76,7 @@ class _HomeState extends State<Home> {
       );
 
       //after getting userInfo make a new user document in users collection
-      _userRef.document(user.id).setData({
+      userRef.document(user.id).setData({
         "id": user.id,
         "username": username,
         "bio": "",
@@ -87,7 +87,7 @@ class _HomeState extends State<Home> {
       });
 
       //after adding new data we need to deserialize so
-      doc = await _userRef.document(user.id).get();
+      doc = await userRef.document(user.id).get();
     }
 
     //if doc exits we make its data accessible to all pages
