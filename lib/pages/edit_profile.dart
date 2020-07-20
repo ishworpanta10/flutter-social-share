@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
@@ -17,6 +19,10 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   bool isLoading = false;
   User user;
+  //for validation
+  bool bioValid = true;
+  bool displayNameValid = true;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController _displayNameController = TextEditingController();
   TextEditingController _bioController = TextEditingController();
@@ -57,6 +63,7 @@ class _EditProfileState extends State<EditProfile> {
           controller: _displayNameController,
           decoration: InputDecoration(
             hintText: "Update Dipslay Name",
+            errorText: displayNameValid ? null : "Display name too short",
           ),
         )
       ],
@@ -71,22 +78,66 @@ class _EditProfileState extends State<EditProfile> {
           height: 12.0,
         ),
         Text(
-          "Bio",
+          "Short Bio",
           style: TextStyle(color: Colors.grey),
         ),
         TextField(
           controller: _bioController,
           decoration: InputDecoration(
-            hintText: "Update Your Bio",
+            hintText: "Update Your Short Bio",
+            errorText: bioValid ? null : "Bio too long",
           ),
         )
       ],
     );
   }
 
+  handleUpdateProfile() {
+    setState(() {
+      //display name validator
+      _displayNameController.text.trim().length < 3 ||
+              _displayNameController.text.trim().isEmpty
+          ? displayNameValid = false
+          : displayNameValid = true;
+      //bio validator
+      _bioController.text.trim().length > 100
+          ? bioValid = false
+          : bioValid = true;
+    });
+
+    //update firestore collection
+
+    if (bioValid && displayNameValid) {
+      userRef.document(widget.currentUserId).updateData({
+        "displayName": _displayNameController.text,
+        "bio": _bioController.text,
+      });
+
+      SnackBar snackBar = SnackBar(
+          content: Text(
+        "Profile Updated",
+        textAlign: TextAlign.center,
+      ));
+
+      _scaffoldKey.currentState.showSnackBar(snackBar);
+
+      Timer(Duration(milliseconds: 800), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Profile(
+              profileId: currentUser?.id,
+            ),
+          ),
+        );
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
@@ -97,14 +148,15 @@ class _EditProfileState extends State<EditProfile> {
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: IconButton(
-                icon: Icon(
-                  Icons.done,
-                  size: 30.0,
-                  color: Colors.green,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
+              icon: Icon(
+                Icons.done,
+                size: 30.0,
+                color: Colors.green,
+              ),
+              onPressed: () {
+                handleUpdateProfile();
+              },
+            ),
           )
         ],
       ),
@@ -117,11 +169,13 @@ class _EditProfileState extends State<EditProfile> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
-                        child: CircleAvatar(
-                          radius: 50.0,
-                          backgroundColor: Colors.grey,
-                          backgroundImage:
-                              CachedNetworkImageProvider(user.photoUrl),
+                        child: GestureDetector(
+                          child: CircleAvatar(
+                            radius: 50.0,
+                            backgroundColor: Colors.grey,
+                            backgroundImage:
+                                CachedNetworkImageProvider(user.photoUrl),
+                          ),
                         ),
                       ),
                       Padding(
@@ -137,7 +191,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                       RaisedButton(
-                        onPressed: () {},
+                        onPressed: handleUpdateProfile,
                         child: Text(
                           "Update Profile",
                           style: TextStyle(
@@ -150,7 +204,15 @@ class _EditProfileState extends State<EditProfile> {
                         height: 16.0,
                       ),
                       FlatButton.icon(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await googleSignIn.signOut();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Home(),
+                            ),
+                          );
+                        },
                         icon: Icon(
                           Icons.cancel,
                           color: Colors.red,

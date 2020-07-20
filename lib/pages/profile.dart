@@ -166,8 +166,11 @@ class _ProfileState extends State<Profile> {
               ),
               Container(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  user.bio,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 30.0),
+                  child: Text(
+                    user.bio,
+                  ),
                 ),
               )
             ],

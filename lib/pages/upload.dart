@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:social_share/models/user.dart';
@@ -186,6 +187,18 @@ class _UploadState extends State<Upload> {
     });
   }
 
+  getUserLocation() async {
+    Position postion = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    List<Placemark> placemarks = await Geolocator()
+        .placemarkFromCoordinates(postion.latitude, postion.longitude);
+    Placemark placemark = placemarks[0];
+    String address =
+        '${placemark.locality}, ${placemark.name} - ${placemark.country}';
+    print("Address :" + address);
+    _locationController.text = address;
+  }
+
   buildUploadForm() {
     return Scaffold(
       appBar: AppBar(
@@ -278,9 +291,7 @@ class _UploadState extends State<Upload> {
             width: 250.0,
             alignment: Alignment.center,
             child: RaisedButton.icon(
-              onPressed: () {
-                print("Current Loc");
-              },
+              onPressed: getUserLocation,
               icon: Icon(
                 Icons.my_location,
                 color: Colors.white,

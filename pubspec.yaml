@@ -24,6 +24,8 @@ dependencies:
   timeago: ^2.0.26
   cached_network_image: ^2.2.0+1
   flutter_svg: ^0.17.4
+  android_intent: ^0.3.7+2
+  permission_handler: ^5.0.1+1
 
   cupertino_icons: ^0.1.3
 
@@ -43,5 +45,3 @@ flutter:
     - family: Signatra
       fonts:
         - asset: assets/fonts/Signatra.ttf
-   
- 

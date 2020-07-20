@@ -10,7 +10,7 @@ import 'package:social_share/pages/profile.dart';
 import 'package:social_share/pages/search.dart';
 import 'package:social_share/pages/upload.dart';
 
-final GoogleSignIn _googleSignIn = GoogleSignIn();
+final GoogleSignIn googleSignIn = GoogleSignIn();
 final CollectionReference userRef = Firestore.instance.collection('users');
 final CollectionReference postsRef = Firestore.instance.collection('posts');
 
@@ -37,14 +37,14 @@ class _HomeState extends State<Home> {
     _pageController = PageController();
 
     //detect when user signed in
-    _googleSignIn.onCurrentUserChanged.listen((account) {
+    googleSignIn.onCurrentUserChanged.listen((account) {
       handleSignIn(account);
     }, onError: (error) {
       print('Error signing in : $error');
     });
 
     //reauthenticated user
-    _googleSignIn.signInSilently(suppressErrors: false).then((account) {
+    googleSignIn.signInSilently(suppressErrors: false).then((account) {
       handleSignIn(account);
     }).catchError((error) {
       print('Error signing in Silently : $error');
@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
 
   createUserInFirestore() async {
     //check if user exits in users collection in db according to their id
-    final GoogleSignInAccount user = _googleSignIn.currentUser;
+    final GoogleSignInAccount user = googleSignIn.currentUser;
     DocumentSnapshot doc = await userRef.document(user.id).get();
 
     //if user doesnot exit take to create account page
@@ -109,13 +109,13 @@ class _HomeState extends State<Home> {
 
   //login with google account
   login() {
-    _googleSignIn.signIn();
+    googleSignIn.signIn();
   }
 
   //logout google user
 
   logout() {
-    _googleSignIn.signOut();
+    googleSignIn.signOut();
   }
 
   _onPageChanged(int pageIndex) {
