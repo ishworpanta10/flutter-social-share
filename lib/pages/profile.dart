@@ -72,7 +72,7 @@ class _ProfileState extends State<Profile> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditProfile(),
+        builder: (context) => EditProfile(currentUserId: currentUserId),
       ),
     );
   }
@@ -92,9 +92,7 @@ class _ProfileState extends State<Profile> {
       future: userRef.document(widget.profileId).get(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
-            child: circularProgress(),
-          );
+          return circularProgress();
         }
         User user = User.fromDocument(snapshot.data);
         return Padding(
