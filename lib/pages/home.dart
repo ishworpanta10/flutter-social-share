@@ -148,7 +148,8 @@ class _HomeState extends State<Home> {
             currentUser: currentUser,
           ),
           Search(),
-          Profile(currentUser: currentUser),
+          //null aware operator to see current user is not null ?
+          Profile(profileId: currentUser?.id),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
