@@ -20,3 +20,24 @@ Container linearProgress() {
     ),
   );
 }
+
+showLoading(context) {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) {
+      return SimpleDialog(
+        contentPadding: EdgeInsets.all(20),
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text('Please wait...')
+            ],
+          )
+        ],
+      );
+    },
+  );
+}

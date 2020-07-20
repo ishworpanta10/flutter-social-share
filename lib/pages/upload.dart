@@ -187,6 +187,8 @@ class _UploadState extends State<Upload> {
     });
   }
 
+
+//with geolocator manually need to turn on
   getUserLocation() async {
     Position postion = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
