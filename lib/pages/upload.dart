@@ -43,6 +43,26 @@ class _UploadState extends State<Upload> {
     }
   }
 
+  //for gps alert
+
+  _checkGps() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Make sure to turn on GPS location"),
+            content: const Text('Please make sure you enable GPS'),
+            actions: <Widget>[
+              FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })
+            ],
+          );
+        });
+  }
+
   Future handleTakeFromGallery() async {
     Navigator.pop(context);
     try {
@@ -182,16 +202,16 @@ class _UploadState extends State<Upload> {
       _image = null;
       isUploading = false;
       //postId will be same and will be overwritten
-      //so we shold provide new postId when we we clear out state
+      //so we shold provide new postId when we clear out state
       postId = Uuid().v4();
     });
   }
 
-
 //with geolocator manually need to turn on
   getUserLocation() async {
+    await _checkGps();
     Position postion = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     List<Placemark> placemarks = await Geolocator()
         .placemarkFromCoordinates(postion.latitude, postion.longitude);
     Placemark placemark = placemarks[0];
@@ -199,6 +219,28 @@ class _UploadState extends State<Upload> {
         '${placemark.locality}, ${placemark.name} - ${placemark.country}';
     print("Address :" + address);
     _locationController.text = address;
+  }
+
+  //show loading
+  showLoading() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          contentPadding: EdgeInsets.all(20),
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                CircularProgressIndicator(),
+                SizedBox(width: 20),
+                Text('Please wait...')
+              ],
+            )
+          ],
+        );
+      },
+    );
   }
 
   buildUploadForm() {

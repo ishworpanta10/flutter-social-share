@@ -27,6 +27,7 @@ dependencies:
   # android_intent: ^0.3.7+2
   # permission_handler: ^5.0.1+1
   # location: ^3.0.2
+  shimmer: ^1.1.1
 
   cupertino_icons: ^0.1.3
 
