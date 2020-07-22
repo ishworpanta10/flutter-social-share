@@ -27,6 +27,9 @@ class _ProfileState extends State<Profile> {
 
   List<Post> posts = [];
 
+  //for toogle grid and posts
+  String viewPost = 'grid';
+
   @override
   void initState() {
     super.initState();
@@ -221,30 +224,64 @@ class _ProfileState extends State<Profile> {
   buildProfilePostView() {
     if (isloading) {
       return ShimmerPost();
-    }
-    // return Column(children: posts);
-
-    List<GridTile> gridTiles = [];
-
-    //post is decerialized and from firestore
-    posts.forEach((post) {
-      gridTiles.add(
-        GridTile(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(6.0),
-            child: PostTile(post: post),
+    } else if (viewPost == 'grid') {
+      List<GridTile> gridTiles = [];
+      //post is decerialized and from firestore
+      posts.forEach((post) {
+        gridTiles.add(
+          GridTile(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(6.0),
+              child: PostTile(post: post),
+            ),
           ),
-        ),
+        );
+      });
+      return GridView.count(
+        crossAxisCount: 3,
+        crossAxisSpacing: 4.5,
+        mainAxisSpacing: 4.5,
+        childAspectRatio: 1.0,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        children: gridTiles,
       );
+    } else if (viewPost == 'list') {
+      return Column(
+        children: posts,
+      );
+    }
+  }
+
+  setPostView(String view) {
+    setState(() {
+      viewPost = view;
     });
-    return GridView.count(
-      crossAxisCount: 3,
-      crossAxisSpacing: 4.5,
-      mainAxisSpacing: 4.5,
-      childAspectRatio: 1.0,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      children: gridTiles,
+  }
+
+  Row buildTogglePostOption() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.grid_on,
+            color: viewPost == 'grid'
+                ? Theme.of(context).primaryColor
+                : Colors.grey,
+          ),
+          onPressed: () => setPostView('grid'),
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.list,
+            color: viewPost == 'list'
+                ? Theme.of(context).primaryColor
+                : Colors.grey,
+          ),
+          onPressed: () => setPostView('list'),
+        )
+      ],
     );
   }
 
@@ -255,6 +292,8 @@ class _ProfileState extends State<Profile> {
       body: ListView(
         children: <Widget>[
           buildProfileHeader(),
+          Divider(),
+          buildTogglePostOption(),
           Divider(
             height: 0.0,
           ),

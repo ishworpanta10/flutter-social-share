@@ -6,8 +6,6 @@ Widget cachedNetworkImage(mediaUrl) {
   return CachedNetworkImage(
     imageUrl: mediaUrl,
     fit: BoxFit.cover,
-    width: double.infinity,
-    // height: 300,
     placeholder: (context, url) {
       return Center(
         child: Shimmer.fromColors(
