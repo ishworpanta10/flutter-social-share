@@ -120,12 +120,18 @@ class _ProfileState extends State<Profile> {
   }
 
   buildProfileButton() {
+    //if user is same checking own profile  show edit profile button
     bool isProfileOwner = currentUserId == widget.profileId;
     if (isProfileOwner) {
       return buildButton(
         text: "Edit Profile",
         onPressed: editProfile,
       );
+    }
+    //if user is another  show follow unfollow button
+
+    else {
+      return Text("button");
     }
   }
 

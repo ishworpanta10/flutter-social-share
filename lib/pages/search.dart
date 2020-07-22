@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:social_share/models/user.dart';
+import 'package:social_share/pages/activity_feed.dart';
 import 'package:social_share/widgets/progress.dart';
 import 'home.dart';
 
@@ -137,10 +138,7 @@ class UserResult extends StatelessWidget {
               user.username,
               style: TextStyle(color: Colors.white),
             ),
-            onTap: () {
-              //TODO:to profile page
-              print("To profile page");
-            },
+            onTap: () => showProfile(context, profileId: user.id),
           ),
           Divider(
             color: Colors.white,
@@ -150,4 +148,4 @@ class UserResult extends StatelessWidget {
       ),
     );
   }
-}
+} 

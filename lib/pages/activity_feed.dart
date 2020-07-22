@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_share/pages/home.dart';
 import 'package:social_share/pages/post_screen.dart';
+import 'package:social_share/pages/profile.dart';
 import 'package:social_share/widgets/header.dart';
 import 'package:social_share/widgets/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -177,14 +178,14 @@ class ActivityFeedItem extends StatelessWidget {
         color: Colors.white54,
         child: ListTile(
           leading: GestureDetector(
-            onTap: () => print("show profile"),
+            onTap: () => showProfile(context, profileId: userId),
             child: CircleAvatar(
               backgroundColor: Colors.grey,
               backgroundImage: CachedNetworkImageProvider(currentUser.photoUrl),
             ),
           ),
           title: GestureDetector(
-            onTap: () => print("show profile"),
+            onTap: () => showProfile(context, profileId: userId),
             child: RichText(
                 overflow: TextOverflow.ellipsis,
                 text: TextSpan(
@@ -213,4 +214,15 @@ class ActivityFeedItem extends StatelessWidget {
       ),
     );
   }
+}
+
+showProfile(BuildContext context, {String profileId}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => Profile(
+        profileId: profileId,
+      ),
+    ),
+  );
 }

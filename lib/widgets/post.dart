@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_share/models/user.dart';
+import 'package:social_share/pages/activity_feed.dart';
 import 'package:social_share/pages/comments.dart';
 import 'package:social_share/pages/home.dart';
 import 'package:social_share/widgets/custom_image.dart';
@@ -105,13 +106,16 @@ class _PostState extends State<Post> {
           User user = User.fromDocument(snapshot.data);
 
           return ListTile(
-            leading: CircleAvatar(
-              // radius: 30.0,
-              backgroundColor: Colors.grey,
-              backgroundImage: CachedNetworkImageProvider(user.photoUrl),
+            leading: GestureDetector(
+              onTap: () => showProfile(context, profileId: user.id),
+              child: CircleAvatar(
+                // radius: 30.0,
+                backgroundColor: Colors.grey,
+                backgroundImage: CachedNetworkImageProvider(user.photoUrl),
+              ),
             ),
             title: GestureDetector(
-              onTap: () => print("To profile Page"),
+              onTap: () => showProfile(context, profileId: user.id),
               child: Text(
                 user.username,
                 style:

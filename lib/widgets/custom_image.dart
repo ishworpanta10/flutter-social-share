@@ -24,8 +24,20 @@ Widget cachedNetworkImage(mediaUrl) {
     },
     errorWidget: (context, url, error) {
       return Center(
-        child: Icon(
-          Icons.error,
+        child: Column(
+          children: <Widget>[
+            Icon(
+              Icons.error,
+              size: 40.0,
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Text(
+              "Error Loading Image",
+              style: TextStyle(color: Colors.pinkAccent),
+            ),
+          ],
         ),
       );
     },
