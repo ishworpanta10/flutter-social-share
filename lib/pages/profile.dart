@@ -153,7 +153,7 @@ class _ProfileState extends State<Profile> {
                           children: <Widget>[
                             buildCountColumn(
                               "Posts",
-                              21,
+                              postCount,
                             ),
                             buildCountColumn(
                               "Followers",

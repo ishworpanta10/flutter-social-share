@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_share/models/user.dart';
 import 'package:social_share/pages/home.dart';
-import 'package:social_share/widgets/progress.dart';
+import 'package:social_share/widgets/custom_image.dart';
 import 'package:social_share/widgets/shimmer.dart';
 
 class Post extends StatefulWidget {
@@ -129,9 +129,7 @@ class _PostState extends State<Post> {
           children: <Widget>[
             ClipRRect(
                 borderRadius: BorderRadius.circular(16.0),
-                child: Image(
-                  image: CachedNetworkImageProvider(mediaUrl),
-                )),
+                child: cachedNetworkImage(mediaUrl)),
           ],
         ),
       ),
