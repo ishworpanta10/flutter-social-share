@@ -11,8 +11,10 @@ import 'package:social_share/pages/search.dart';
 import 'package:social_share/pages/upload.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
-final CollectionReference userRef = Firestore.instance.collection('users');
-final CollectionReference postsRef = Firestore.instance.collection('posts');
+final _firestore = Firestore.instance;
+final CollectionReference userRef = _firestore.collection('users');
+final CollectionReference postsRef = _firestore.collection('posts');
+final CollectionReference commentRef = _firestore.collection('comments');
 
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final DateTime timestamp = DateTime.now();
