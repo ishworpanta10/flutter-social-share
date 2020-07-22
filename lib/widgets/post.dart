@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_share/models/user.dart';
+import 'package:social_share/pages/comments.dart';
 import 'package:social_share/pages/home.dart';
 import 'package:social_share/widgets/custom_image.dart';
 import 'package:social_share/widgets/shimmer.dart';
@@ -200,7 +201,12 @@ class _PostState extends State<Post> {
                 size: 28.0,
                 color: Colors.blue[900],
               ),
-              onPressed: () => print('Comment in Post'),
+              onPressed: () => showComments(
+                context,
+                postId: postId,
+                ownerId: ownerId,
+                mediaUrl: mediaUrl,
+              ),
             ),
           ],
         ),
@@ -253,4 +259,14 @@ class _PostState extends State<Post> {
       ],
     );
   }
+}
+
+showComments(context, {String postId, String mediaUrl, String ownerId}) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return Comments(
+      postId: postId,
+      postOwnerId: ownerId,
+      postMediaUrl: mediaUrl,
+    );
+  }));
 }
