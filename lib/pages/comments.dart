@@ -88,7 +88,7 @@ class CommentsState extends State<Comments> {
         "userId": currentUser.id,
         "userProfileImg": currentUser.photoUrl,
         "postId": postId,
-        "medaiUrl": postMediaUrl,
+        "mediaUrl": postMediaUrl,
         "timestamp": timestamp,
       });
     }
