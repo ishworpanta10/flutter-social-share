@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:social_share/models/user.dart';
 import 'package:social_share/pages/edit_profile.dart';
 import 'package:social_share/pages/home.dart';
@@ -224,6 +225,30 @@ class _ProfileState extends State<Profile> {
   buildProfilePostView() {
     if (isloading) {
       return ShimmerPost();
+    } else if (posts.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(20.0),
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SvgPicture.asset(
+              'assets/images/no_content.svg',
+              height: 330.0,
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Text(
+              'No Posts ',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.redAccent,
+                  fontSize: 30.0),
+            ),
+          ],
+        ),
+      );
     } else if (viewPost == 'grid') {
       List<GridTile> gridTiles = [];
       //post is decerialized and from firestore
