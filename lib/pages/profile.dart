@@ -29,7 +29,7 @@ class _ProfileState extends State<Profile> {
   List<Post> posts = [];
 
   //for toogle grid and posts
-  String viewPost = 'grid';
+  String viewPost = 'list';
 
   @override
   void initState() {
@@ -290,6 +290,16 @@ class _ProfileState extends State<Profile> {
       children: <Widget>[
         IconButton(
           icon: Icon(
+            Icons.list,
+            size: 30,
+            color: viewPost == 'list'
+                ? Theme.of(context).primaryColor
+                : Colors.grey,
+          ),
+          onPressed: () => setPostView('list'),
+        ),
+        IconButton(
+          icon: Icon(
             Icons.grid_on,
             color: viewPost == 'grid'
                 ? Theme.of(context).primaryColor
@@ -297,15 +307,6 @@ class _ProfileState extends State<Profile> {
           ),
           onPressed: () => setPostView('grid'),
         ),
-        IconButton(
-          icon: Icon(
-            Icons.list,
-            color: viewPost == 'list'
-                ? Theme.of(context).primaryColor
-                : Colors.grey,
-          ),
-          onPressed: () => setPostView('list'),
-        )
       ],
     );
   }

@@ -73,8 +73,10 @@ class _PostState extends State<Post> {
   final String location;
   final String imgCaption;
   final String mediaUrl;
+  final String currentUserId = currentUser?.id;
   int likeCount;
   Map likes;
+  bool isLiked;
 
   _PostState({
     this.postId,
@@ -122,7 +124,7 @@ class _PostState extends State<Post> {
 
   buildPostImage() {
     return GestureDetector(
-      onDoubleTap: () => print("Like a post"),
+      onDoubleTap: handleLike,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Stack(
@@ -136,6 +138,44 @@ class _PostState extends State<Post> {
     );
   }
 
+  handleLike() {
+    //to check if user already liked it
+    //if islike is true retuen from firestore it is already liked
+    bool _isLiked = likes[currentUserId] == true;
+
+    if (_isLiked) {
+      postsRef
+          .document(ownerId)
+          .collection('userPosts')
+          .document(postId)
+          .updateData({
+        'likes.$currentUserId': false,
+      });
+      setState(() {
+        likeCount -= 1;
+
+        //for fav border and fill border
+        isLiked = false;
+        likes[currentUserId] = false;
+      });
+    } else if (!_isLiked) {
+      postsRef
+          .document(ownerId)
+          .collection('userPosts')
+          .document(postId)
+          .updateData({
+        'likes.$currentUserId': true,
+      });
+      setState(() {
+        likeCount += 1;
+
+        //for fav border and fill border
+        isLiked = true;
+        likes[currentUserId] = true;
+      });
+    }
+  }
+
   buildPostFooter() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -147,11 +187,11 @@ class _PostState extends State<Post> {
               padding: const EdgeInsets.only(left: 20.0),
               child: IconButton(
                 icon: Icon(
-                  Icons.favorite,
+                  isLiked ? Icons.favorite : Icons.favorite_border,
                   size: 28.0,
                   color: Colors.pink,
                 ),
-                onPressed: () => print('Favourite Post'),
+                onPressed: handleLike,
               ),
             ),
             IconButton(
@@ -203,6 +243,7 @@ class _PostState extends State<Post> {
 
   @override
   Widget build(BuildContext context) {
+    isLiked = (likes[currentUserId] == true);
     return Column(
       children: <Widget>[
         buildPostHeader(),
