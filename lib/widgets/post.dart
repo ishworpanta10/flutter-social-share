@@ -231,7 +231,7 @@ class _PostState extends State<Post> {
         "userId": currentUser.id,
         "userProfileImg": currentUser.photoUrl,
         "postId": postId,
-        "medaiURl": mediaUrl,
+        "medaiUrl": mediaUrl,
         "timestamp": timestamp,
       });
     }
