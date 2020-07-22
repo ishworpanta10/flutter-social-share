@@ -6,7 +6,7 @@ import 'package:social_share/pages/edit_profile.dart';
 import 'package:social_share/pages/home.dart';
 import 'package:social_share/widgets/header.dart';
 import 'package:social_share/widgets/post.dart';
-import 'package:social_share/widgets/progress.dart';
+import 'package:social_share/widgets/post_tile.dart';
 import 'package:social_share/widgets/shimmerPost.dart';
 import 'package:social_share/widgets/shimmerProfile.dart';
 
@@ -222,7 +222,30 @@ class _ProfileState extends State<Profile> {
     if (isloading) {
       return ShimmerPost();
     }
-    return Column(children: posts);
+    // return Column(children: posts);
+
+    List<GridTile> gridTiles = [];
+
+    //post is decerialized and from firestore
+    posts.forEach((post) {
+      gridTiles.add(
+        GridTile(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(6.0),
+            child: PostTile(post: post),
+          ),
+        ),
+      );
+    });
+    return GridView.count(
+      crossAxisCount: 3,
+      crossAxisSpacing: 4.5,
+      mainAxisSpacing: 4.5,
+      childAspectRatio: 1.0,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      children: gridTiles,
+    );
   }
 
   @override
