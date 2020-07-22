@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 AppBar header(context,
-    {bool isAppTitle = false, String titleText, bool removeBackbutton = false}) {
+    {bool isAppTitle = false,
+    String titleText,
+    bool removeBackbutton = false}) {
   return AppBar(
     automaticallyImplyLeading: removeBackbutton ? false : true,
     title: Text(
@@ -11,6 +13,7 @@ AppBar header(context,
         fontFamily: isAppTitle ? 'Signatra' : "",
         color: Colors.white,
       ),
+      overflow: TextOverflow.ellipsis,
     ),
     titleSpacing: 1.6,
     centerTitle: true,
