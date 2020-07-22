@@ -180,6 +180,7 @@ class _PostState extends State<Post> {
           .updateData({
         'likes.$currentUserId': false,
       });
+      removeLikeToActivityFeed();
       setState(() {
         likeCount -= 1;
 
@@ -195,6 +196,7 @@ class _PostState extends State<Post> {
           .updateData({
         'likes.$currentUserId': true,
       });
+      addLikeToActivityFeed();
       setState(() {
         likeCount += 1;
 
@@ -208,6 +210,47 @@ class _PostState extends State<Post> {
         setState(() {
           showHeart = false;
         });
+      });
+    }
+  }
+
+  //for adding notifation for Activityfeedpage
+  addLikeToActivityFeed() {
+    //not shwoing notification if onwer like his/her own post
+    //but if other likes showing notifation in actoivity feed
+    bool isNotPostOwner = currentUserId != ownerId;
+
+    if (isNotPostOwner) {
+      activityFeedRef
+          .document(ownerId)
+          .collection("feedItems")
+          .document(postId)
+          .setData({
+        "type": "like",
+        "username": currentUser.username,
+        "userId": currentUser.id,
+        "userProfileImg": currentUser.photoUrl,
+        "postId": postId,
+        "medaiURl": mediaUrl,
+        "timestamp": timestamp,
+      });
+    }
+  }
+
+  //for removing notifation for Activityfeedpage
+
+  removeLikeToActivityFeed() {
+    bool isNotPostOwner = currentUserId != ownerId;
+    if (isNotPostOwner) {
+      activityFeedRef
+          .document(ownerId)
+          .collection("feedItems")
+          .document(postId)
+          .get()
+          .then((doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
       });
     }
   }

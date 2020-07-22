@@ -15,7 +15,7 @@ final _firestore = Firestore.instance;
 final CollectionReference userRef = _firestore.collection('users');
 final CollectionReference postsRef = _firestore.collection('posts');
 final CollectionReference commentRef = _firestore.collection('comments');
-final CollectionReference feedRef = _firestore.collection('feeds');
+final CollectionReference activityFeedRef = _firestore.collection('feed');
 
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final DateTime timestamp = DateTime.now();
@@ -130,7 +130,7 @@ class _HomeState extends State<Home> {
   //animate to change page
   _changeIndex(int pageIndex) {
     _pageController.animateToPage(pageIndex,
-        duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+        duration: Duration(milliseconds: 500), curve: Curves.ease);
   }
 
   //widget to display for authenticated users

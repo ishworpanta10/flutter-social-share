@@ -146,7 +146,7 @@ class _ProfileState extends State<Profile> {
                   CircleAvatar(
                     radius: 40.0,
                     backgroundColor: Colors.grey,
-                    backgroundImage: CachedNetworkImageProvider(user.photoUrl),
+                    backgroundImage: CachedNetworkImageProvider(user?.photoUrl),
                   ),
                   Expanded(
                     child: Column(
