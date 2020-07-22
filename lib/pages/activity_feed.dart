@@ -77,6 +77,7 @@ class _ActivityFeedState extends State<ActivityFeed> {
                   ),
                 );
               }
+
               return ListView(
                 children: snapshot.data,
               );

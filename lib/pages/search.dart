@@ -20,6 +20,7 @@ class _SearchState extends State<Search> {
     return AppBar(
       backgroundColor: Colors.white,
       title: TextFormField(
+        textCapitalization: TextCapitalization.words,
         controller: searchController,
         decoration: InputDecoration(
           hintText: "Seach for a user . . . ",
@@ -97,6 +98,14 @@ class _SearchState extends State<Search> {
             );
             searchResults.add(userResult);
           });
+          if (searchResults.isEmpty) {
+            return Center(
+              child: Text(
+                "No User with that username !",
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          }
           return ListView(
             children: searchResults,
           );
@@ -148,4 +157,4 @@ class UserResult extends StatelessWidget {
       ),
     );
   }
-} 
+}

@@ -60,6 +60,12 @@ class CommentsState extends State<Comments> {
             );
           });
 
+          if (comments.isEmpty) {
+            return Center(
+              child: Text("No Comment yet !"),
+            );
+          }
+
           return ListView(
             children: comments,
           );
