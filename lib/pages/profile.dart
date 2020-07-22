@@ -31,6 +31,9 @@ class _ProfileState extends State<Profile> {
   //for toogle grid and posts
   String viewPost = 'list';
 
+  //for folllowing
+  bool isFollowing = false;
+
   @override
   void initState() {
     super.initState();
@@ -92,9 +95,9 @@ class _ProfileState extends State<Profile> {
           width: MediaQuery.of(context).size.width * .55,
           height: 27.0,
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: isFollowing ? Colors.white : Colors.blue,
             border: Border.all(
-              color: Colors.blue,
+              color: isFollowing ? Colors.grey : Colors.blue,
             ),
             borderRadius: BorderRadius.circular(6.0),
           ),
@@ -102,7 +105,7 @@ class _ProfileState extends State<Profile> {
             text,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: isFollowing ? Colors.black : Colors.white,
             ),
           ),
         ),
@@ -119,6 +122,10 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  handleUnfollowUser() {}
+
+  handleFollowwUser() {}
+
   buildProfileButton() {
     //if user is same checking own profile  show edit profile button
     bool isProfileOwner = currentUserId == widget.profileId;
@@ -129,9 +136,16 @@ class _ProfileState extends State<Profile> {
       );
     }
     //if user is another  show follow unfollow button
-
-    else {
-      return Text("button");
+    else if (isFollowing) {
+      return buildButton(
+        text: "Unfollow",
+        onPressed: handleUnfollowUser,
+      );
+    } else if (!isFollowing) {
+      return buildButton(
+        text: "Follow",
+        onPressed: handleFollowwUser,
+      );
     }
   }
 
