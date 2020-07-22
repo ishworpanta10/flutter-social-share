@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:social_share/pages/home.dart';
 
 void main() {
-  //for enabling timestamp
-  //depricated setting
-
   runApp(MyApp());
 }
 

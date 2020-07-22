@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:animator/animator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +81,7 @@ class _PostState extends State<Post> {
   int likeCount;
   Map likes;
   bool isLiked;
+  bool showHeart = false;
 
   _PostState({
     this.postId,
@@ -129,10 +133,34 @@ class _PostState extends State<Post> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Stack(
+          alignment: Alignment.center,
           children: <Widget>[
             ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
-                child: cachedNetworkImage(mediaUrl)),
+              borderRadius: BorderRadius.circular(16.0),
+              child: cachedNetworkImage(mediaUrl),
+            ),
+            showHeart
+                ? Animator(
+                    duration: Duration(milliseconds: 300),
+                    tween: Tween(begin: 0.8, end: 1.4),
+                    curve: Curves.elasticOut,
+                    cycles: 0,
+                    builder: (context, animatorState, child) => Transform.scale(
+                      scale: animatorState.value,
+                      child: Icon(
+                        Icons.favorite,
+                        size: 100.0,
+                        color: Colors.red,
+                      ),
+                    ),
+                  )
+                : Text(""),
+            // showHeart
+            //     ? Icon(
+            //         Icons.favorite,
+            //         size: 80.0,
+            //       )
+            //     : Text("")
           ],
         ),
       ),
@@ -173,6 +201,13 @@ class _PostState extends State<Post> {
         //for fav border and fill border
         isLiked = true;
         likes[currentUserId] = true;
+        showHeart = true;
+      });
+      //for showing heart for half seconf
+      Timer(Duration(milliseconds: 500), () {
+        setState(() {
+          showHeart = false;
+        });
       });
     }
   }

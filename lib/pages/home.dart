@@ -15,6 +15,7 @@ final _firestore = Firestore.instance;
 final CollectionReference userRef = _firestore.collection('users');
 final CollectionReference postsRef = _firestore.collection('posts');
 final CollectionReference commentRef = _firestore.collection('comments');
+final CollectionReference feedRef = _firestore.collection('feeds');
 
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final DateTime timestamp = DateTime.now();

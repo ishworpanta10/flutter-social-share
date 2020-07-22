@@ -52,11 +52,12 @@ class CommentsState extends State<Comments> {
 
           //deserialize comment data as like user and posts
           //below in comment stl widget
-
           List<Comment> comments = [];
 
           snapshot.data.documents.forEach((comment) {
-            comments.add(Comment.fromDocument(comment));
+            comments.add(
+              Comment.fromDocument(comment),
+            );
           });
 
           return ListView(
