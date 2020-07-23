@@ -33,11 +33,58 @@ class _ProfileState extends State<Profile> {
 
   //for folllowing
   bool isFollowing = false;
+  int followerCount = 0;
+  int followingCount = 0;
 
   @override
   void initState() {
     super.initState();
     getProfilePost();
+    getFollowers();
+    getFollowing();
+    checkIfFollowing();
+  }
+
+  getFollowing() async {
+    QuerySnapshot snapshot = await followingRef
+        .document(widget.profileId)
+        .collection('userFollowing')
+        .getDocuments();
+    setState(() {
+      followingCount = snapshot.documents.length;
+    });
+  }
+
+  getFollowers() async {
+    QuerySnapshot snapshot = await followersRef
+        .document(widget.profileId)
+        .collection('userFollowers')
+        .getDocuments();
+
+    setState(() {
+      followerCount = snapshot.documents.length;
+    });
+  }
+
+  checkIfFollowing() async {
+    //check if we our current uid follow them
+    DocumentSnapshot doc = await followersRef
+        .document(widget.profileId)
+        .collection('userFollowers')
+        .document(currentUserId)
+        .get();
+
+    //   OR
+    //   DocumentSnapshot doc = await followingRef
+    // .document(currentUserId)
+    // .collection('userFollowing')
+    // .document(widget.profileId)
+    // .get();
+
+    setState(() {
+      isFollowing = doc.exists;
+      print(doc.exists);
+    });
   }
 
   getProfilePost() async {
@@ -255,11 +302,11 @@ class _ProfileState extends State<Profile> {
                             ),
                             buildCountColumn(
                               "Followers",
-                              344,
+                              followerCount,
                             ),
                             buildCountColumn(
                               "Following",
-                              65,
+                              followingCount,
                             ),
                           ],
                         ),

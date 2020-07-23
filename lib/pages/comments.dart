@@ -85,7 +85,7 @@ class CommentsState extends State<Comments> {
     });
     //adding comment activity feed for post owner
     bool isNotPostOwner = postOwnerId != currentUser.id;
-
+    
     if (isNotPostOwner) {
       activityFeedRef.document(postOwnerId).collection("feedItems").add({
         "type": "comment",
