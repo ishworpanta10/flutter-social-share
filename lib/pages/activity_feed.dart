@@ -25,11 +25,6 @@ class _ActivityFeedState extends State<ActivityFeed> {
         .limit(50)
         .getDocuments();
 
-    //printing map
-    // snapshot.documents.forEach((doc) {
-    //   print("Activity Feed Items:  ${doc.data}");
-    // });
-
     List<ActivityFeedItem> activityfeedsItems = [];
 
     snapshot.documents.forEach((doc) {
@@ -97,7 +92,7 @@ class ActivityFeedItem extends StatelessWidget {
   final Timestamp timestamp;
   final String type;
 
-  ///like , follow and comment
+  // like , follow and comment
   final String userId;
   final String userProfileImg;
   final String username;
@@ -125,14 +120,16 @@ class ActivityFeedItem extends StatelessWidget {
     );
   }
 
-  showPost(context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => PostScreen(
-                  postId: postId,
-                  userId: userId,
-                )));
+  showPost(BuildContext context) {
+     Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return PostScreen(
+          postId: postId,
+          userId: userId,
+        );
+      }),
+    );
   }
 
   configureMediaPreview(context) {
@@ -156,7 +153,7 @@ class ActivityFeedItem extends StatelessWidget {
         ),
       );
     } else {
-      mediaPreview = Text("data");
+      mediaPreview = Text("");
     }
 
     if (type == "like") {
@@ -164,7 +161,7 @@ class ActivityFeedItem extends StatelessWidget {
     } else if (type == "follow") {
       activityItemText = "following you";
     } else if (type == "comment") {
-      activityItemText = "replied : $commentData";
+      activityItemText = "commented on a post :\n $commentData";
     } else {
       activityItemText = "Error : Unknown Type '$type' ";
     }
@@ -172,6 +169,7 @@ class ActivityFeedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(postId);
     configureMediaPreview(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 4.0),
@@ -182,7 +180,7 @@ class ActivityFeedItem extends StatelessWidget {
             onTap: () => showProfile(context, profileId: userId),
             child: CircleAvatar(
               backgroundColor: Colors.grey,
-              backgroundImage: CachedNetworkImageProvider(currentUser.photoUrl),
+              backgroundImage: CachedNetworkImageProvider(userProfileImg),
             ),
           ),
           title: GestureDetector(
@@ -196,7 +194,7 @@ class ActivityFeedItem extends StatelessWidget {
                     ),
                     children: [
                       TextSpan(
-                        text: currentUser.username,
+                        text: username,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       TextSpan(text: " $activityItemText"),
@@ -211,6 +209,7 @@ class ActivityFeedItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           trailing: mediaPreview,
+          isThreeLine: true,
         ),
       ),
     );

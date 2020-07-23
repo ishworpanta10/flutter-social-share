@@ -5,10 +5,10 @@ import 'package:social_share/widgets/post.dart';
 import 'package:social_share/widgets/shimmerPost.dart';
 
 class PostScreen extends StatelessWidget {
-  final String postId;
   final String userId;
+  final String postId;
 
-  PostScreen({this.postId, this.userId});
+  PostScreen({this.userId, this.postId});
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +33,16 @@ class PostScreen extends StatelessWidget {
           }
 
           Post post = Post.fromDocument(snapshot.data);
-          return Scaffold(
-            appBar: header(context, titleText: post.imgCaption),
-            body: ListView(
-              children: <Widget>[
-                Center(
-                  child: Container(
+          return Center(
+            child: Scaffold(
+              appBar: header(context, titleText: post.imgCaption),
+              body: ListView(
+                children: <Widget>[
+                  Container(
                     child: post,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         });

@@ -122,9 +122,83 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  handleUnfollowUser() {}
+  handleUnfollowUser() {
+    setState(() {
+      isFollowing = false;
+    });
+    //remove follower
+    followersRef
+        .document(widget.profileId)
+        .collection("userFollowers")
+        .document(currentUserId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
 
-  handleFollowwUser() {}
+    //remove following count from following collection
+    followingRef
+        .document(currentUserId)
+        .collection("userFollowing")
+        .document(widget.profileId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+
+    //delete activity feed item
+
+    activityFeedRef
+        .document(widget.profileId)
+        .collection("feedItems")
+        .document(currentUserId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+  }
+
+  handleFollowUser() {
+    setState(() {
+      isFollowing = true;
+    });
+
+    //make auth user followers of THAT (Another) user
+    // (update their followes collection)
+    followersRef
+        .document(widget.profileId)
+        .collection("userFollowers")
+        .document(currentUserId)
+        .setData({});
+
+    //Put that user on your folllowing collection(update your following collection)
+    followingRef
+        .document(currentUserId)
+        .collection("userFollowing")
+        .document(widget.profileId)
+        .setData({});
+
+    //add activity feed item for that user to notify that we follow them
+
+    activityFeedRef
+        .document(widget.profileId)
+        .collection("feedItems")
+        .document(currentUserId)
+        .setData({
+      "type": "follow",
+      "ownerId": widget.profileId,
+      "userId": currentUser.id,
+      "username": currentUser.username,
+      "userProfileImg": currentUser.photoUrl,
+      "timestamp": timestamp,
+    });
+  }
 
   buildProfileButton() {
     //if user is same checking own profile  show edit profile button
@@ -144,7 +218,7 @@ class _ProfileState extends State<Profile> {
     } else if (!isFollowing) {
       return buildButton(
         text: "Follow",
-        onPressed: handleFollowwUser,
+        onPressed: handleFollowUser,
       );
     }
   }

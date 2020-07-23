@@ -90,12 +90,12 @@ class CommentsState extends State<Comments> {
       activityFeedRef.document(postOwnerId).collection("feedItems").add({
         "type": "comment",
         "commentData": commetController.text,
+        "timestamp": timestamp,
+        "postId": postId,
         "username": currentUser.username,
         "userId": currentUser.id,
         "userProfileImg": currentUser.photoUrl,
-        "postId": postId,
         "mediaUrl": postMediaUrl,
-        "timestamp": timestamp,
       });
     }
     commetController.clear();
