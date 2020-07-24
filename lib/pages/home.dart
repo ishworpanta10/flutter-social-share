@@ -8,6 +8,7 @@ import 'package:social_share/pages/activity_feed.dart';
 import 'package:social_share/pages/create_account.dart';
 import 'package:social_share/pages/profile.dart';
 import 'package:social_share/pages/search.dart';
+import 'package:social_share/pages/timeline.dart';
 import 'package:social_share/pages/upload.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -143,11 +144,13 @@ class _HomeState extends State<Home> {
         onPageChanged: _onPageChanged,
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
-          // Timeline(),
-          RaisedButton(
-            onPressed: logout,
-            child: Text("Log Out"),
+          Timeline(
+            currentUser: currentUser,
           ),
+          // RaisedButton(
+          //   onPressed: logout,
+          //   child: Text("Log Out"),
+          // ),
           ActivityFeed(),
           Upload(
             currentUser: currentUser,
