@@ -95,6 +95,80 @@ class _PostState extends State<Post> {
     this.likeCount,
   });
 
+//to deleete the poat owner id and
+//current user id must be same and can be used interchangebly
+  deletePost() async {
+    //deleting post iteslf
+    postsRef
+        .document(ownerId)
+        .collection('userPosts')
+        .document(postId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+
+    //deleting uploaded images
+    storageRef.child('post_$postId.jpg').delete();
+
+    //deleting activity feed  notification for that post
+    QuerySnapshot activityFeesSnapshots = await activityFeedRef
+        .document(ownerId)
+        .collection("feedItems")
+        .where("postId", isEqualTo: postId)
+        .getDocuments();
+
+    activityFeesSnapshots.documents.forEach((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+
+    //deleting comments
+    QuerySnapshot commentSnapshot =
+        await commentRef.document(postId).collection("comments").getDocuments();
+
+    commentSnapshot.documents.forEach((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+  }
+
+  handleDeletePost(BuildContext parentContext) {
+    return showDialog(
+        context: parentContext,
+        builder: (context) {
+          return SimpleDialog(
+            title: Text("Delete this post ?"),
+            children: <Widget>[
+              SimpleDialogOption(
+                child: Text(
+                  'Delete',
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  deletePost();
+                },
+              ),
+              SimpleDialogOption(
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
   buildPostHeader() {
     return FutureBuilder(
         future: userRef.document(ownerId).get(),
@@ -104,6 +178,7 @@ class _PostState extends State<Post> {
           }
 
           User user = User.fromDocument(snapshot.data);
+          bool isPostOwner = currentUserId == ownerId;
 
           return ListTile(
             leading: GestureDetector(
@@ -123,10 +198,12 @@ class _PostState extends State<Post> {
               ),
             ),
             subtitle: Text(location),
-            trailing: IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: () => print("Delete Post"),
-            ),
+            trailing: isPostOwner
+                ? IconButton(
+                    icon: Icon(Icons.more_vert),
+                    onPressed: () => handleDeletePost(context),
+                  )
+                : Text(""),
           );
         });
   }
