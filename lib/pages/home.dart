@@ -58,9 +58,9 @@ class _HomeState extends State<Home> {
   }
 
   //handle google sign in
-  handleSignIn(GoogleSignInAccount account) {
+  handleSignIn(GoogleSignInAccount account) async {
     if (account != null) {
-      createUserInFirestore();
+      await createUserInFirestore();
       setState(() {
         print('User signed in account : $account');
         isAuth = true;
@@ -145,7 +145,7 @@ class _HomeState extends State<Home> {
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           Timeline(
-            currentUser: currentUser,
+            // currentUser: currentUser,
           ),
           // RaisedButton(
           //   onPressed: logout,

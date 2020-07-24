@@ -7,9 +7,9 @@ import 'package:social_share/widgets/header.dart';
 import 'package:social_share/widgets/shimmer.dart';
 
 class Timeline extends StatefulWidget {
-  final User currentUser;
+  // final User currentUser;
 
-  Timeline({this.currentUser});
+  // Timeline({this.currentUser});
   @override
   _TimelineState createState() => _TimelineState();
 }
