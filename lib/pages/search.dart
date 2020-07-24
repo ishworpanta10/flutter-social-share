@@ -134,7 +134,11 @@ class UserResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).primaryColor.withOpacity(0.7),
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      width: MediaQuery.of(context).size.width * 0.9,
       child: Column(
         children: <Widget>[
           ListTile(
@@ -152,6 +156,9 @@ class UserResult extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
             onTap: () => showProfile(context, profileId: user.id),
+          ),
+          SizedBox(
+            height: 10.0,
           ),
           Divider(
             color: Colors.white,
